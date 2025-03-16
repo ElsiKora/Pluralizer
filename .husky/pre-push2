@@ -7,3 +7,4 @@ fi
 
 echo '⌛️⌛️⌛️ Running branch name linter...'
 npx @elsikora/git-branch-lint
+

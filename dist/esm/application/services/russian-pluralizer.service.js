@@ -1,6 +1,6 @@
-import { Gender } from '../../domain/entities/word.entity.js';
 import { russianUncountableWords, russianIrregularSingulars, russianIrregularPlurals } from '../../infrastructure/exceptions/russian-exceptions.service.js';
 import { russianPluralRules, russianSingularRules } from '../../infrastructure/rules/russian-rules.service.js';
+import { Gender } from '../../domain/enum/gender.enum.js';
 
 class RussianPluralizer {
     pluralize(word, count = 2) {
@@ -35,7 +35,6 @@ class RussianPluralizer {
         }
         // For simplicity, we check common plural endings
         // This is not 100% accurate for all cases
-        // NOTE: Removed 'а' from this regex as it's a common singular ending, not plural
         return /[ыи]$/.test(lowerWord);
     }
     isSingular(word) {

@@ -1,5 +1,6 @@
 import { IPluralizer } from '../../domain/interfaces/pluralizer.interface';
-import { Gender, Word } from '../../domain/entities/word.entity';
+import { Word } from '../../domain/entities/word.entity';
+import { Gender } from "../../domain/enum/gender.enum";
 export declare class RussianPluralizer implements IPluralizer {
     pluralize(word: Word, count?: number): string;
     isPlural(word: string): boolean;

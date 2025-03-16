@@ -1,9 +1,6 @@
-var Gender;
-(function (Gender) {
-    Gender["Masculine"] = "masculine";
-    Gender["Feminine"] = "feminine";
-    Gender["Neuter"] = "neuter";
-})(Gender || (Gender = {}));
+/**
+ * Word entity that represents a word with its properties
+ */
 class Word {
     value;
     properties;
@@ -22,4 +19,4 @@ class Word {
     }
 }
 
-export { Gender, Word };
+export { Word };

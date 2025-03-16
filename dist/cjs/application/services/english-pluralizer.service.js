@@ -21,7 +21,7 @@ class EnglishPluralizer {
             return false;
         }
         const lowerWord = word.toLowerCase();
-        // Проверка слов, которые неправильно определяются как множественное число
+        // Check if word is a false plural
         if (englishExceptions_service.englishFalsePluralWords.includes(lowerWord)) {
             return false;
         }

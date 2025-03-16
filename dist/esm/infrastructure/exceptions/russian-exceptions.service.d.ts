@@ -1,4 +1,4 @@
-import { Gender } from '../../domain/entities/word.entity';
+import { Gender } from "../../domain/enum/gender.enum";
 export interface RussianExceptionEntry {
     plural: string;
     gender: Gender;

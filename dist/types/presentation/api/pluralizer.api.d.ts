@@ -1,7 +1,8 @@
-import { Gender, Language } from '../../domain/entities/word.entity';
+import { Language } from "../../domain/type/language.type";
+import { Gender } from "../../domain/enum/gender.enum";
 export declare class Pluralizer {
-    private readonly englishPluralizer;
-    private readonly russianPluralizer;
+    private readonly pluralizerFactory;
+    private readonly languageDetector;
     constructor();
     pluralize(word: string, options?: {
         language?: Language;
@@ -15,6 +16,15 @@ export declare class Pluralizer {
         gender?: Gender;
     }): string;
     toSingular(word: string, language?: Language): string;
-    private getPluralizerForLanguage;
-    private detectLanguage;
+    /**
+     * Gets a list of all supported languages
+     * @returns Array of supported language codes
+     */
+    getSupportedLanguages(): Language[];
+    /**
+     * Checks if a language is supported
+     * @param language The language code to check
+     * @returns True if the language is supported, false otherwise
+     */
+    supportsLanguage(language: Language): boolean;
 }

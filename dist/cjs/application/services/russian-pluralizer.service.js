@@ -1,8 +1,8 @@
 'use strict';
 
-var word_entity = require('../../domain/entities/word.entity.js');
 var russianExceptions_service = require('../../infrastructure/exceptions/russian-exceptions.service.js');
 var russianRules_service = require('../../infrastructure/rules/russian-rules.service.js');
+var gender_enum = require('../../domain/enum/gender.enum.js');
 
 class RussianPluralizer {
     pluralize(word, count = 2) {
@@ -37,7 +37,6 @@ class RussianPluralizer {
         }
         // For simplicity, we check common plural endings
         // This is not 100% accurate for all cases
-        // NOTE: Removed 'а' from this regex as it's a common singular ending, not plural
         return /[ыи]$/.test(lowerWord);
     }
     isSingular(word) {
@@ -75,7 +74,7 @@ class RussianPluralizer {
         else {
             // Without gender, we have to make an educated guess
             // Try masculine rules first, then feminine, then neuter
-            const genders = [word_entity.Gender.Masculine, word_entity.Gender.Feminine, word_entity.Gender.Neuter];
+            const genders = [gender_enum.Gender.Masculine, gender_enum.Gender.Feminine, gender_enum.Gender.Neuter];
             for (const testGender of genders) {
                 for (const rule of russianRules_service.russianPluralRules) {
                     if (rule.matches(lowerWord, testGender)) {
@@ -105,7 +104,7 @@ class RussianPluralizer {
         }
         // Apply regular rules - for Russian, we need to guess the gender
         // Try each gender with its rules
-        const genders = [word_entity.Gender.Masculine, word_entity.Gender.Feminine, word_entity.Gender.Neuter];
+        const genders = [gender_enum.Gender.Masculine, gender_enum.Gender.Feminine, gender_enum.Gender.Neuter];
         for (const gender of genders) {
             for (const rule of russianRules_service.russianSingularRules) {
                 if (rule.matches(lowerWord, gender)) {

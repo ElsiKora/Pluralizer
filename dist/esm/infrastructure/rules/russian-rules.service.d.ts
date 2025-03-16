@@ -1,4 +1,4 @@
-import { Gender } from '../../domain/entities/word.entity';
+import { Gender } from "../../domain/enum/gender.enum";
 export interface RussianRule {
     matches: (word: string, gender?: Gender) => boolean;
     apply: (word: string) => string;

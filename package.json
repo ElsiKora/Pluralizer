@@ -1,16 +1,26 @@
 {
-  "name": "pluralizer",
+  "name": "@elsikora/pluralizer",
   "version": "1.0.0",
-  "description": "A library for pluralizing words in English and Russian",
+  "description": "A library for pluralizing words in different languages",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "test:unit": "vitest run --dir tests/unit",
-    "test:e2e": "vitest run --dir tests/e2e",
-    "test": "vitest run",
-    "lint": "eslint . --ext .ts",
-    "typecheck": "tsc --noEmit"
+    "prebuild": "rimraf dist",
+    "build": "npm run prebuild && rollup -c",
+    "test:all": "npm run test:unit && npm run test:e2e",
+    "test:e2e": "npm run build && vitest --config vitest.config.e2e.ts --typecheck.tsconfig tsconfig.json",
+    "test:unit": "vitest run test/unit --config vitest.config.unit.ts"
+  },
+  "homepage": "https://github.com/ElsiKora/Pluralizer#readme",
+  "bugs": {
+    "url": "https://github.com/ElsiKora/Pluralizer/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ElsiKora/Pluralizer"
   },
   "type": "module",
   "keywords": [
@@ -20,13 +30,14 @@
     "russian",
     "i18n"
   ],
-  "author": "",
+  "author": "ElsiKora",
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-typescript": "^12.1.2",
     "@typescript-eslint/eslint-plugin": "^8.26.1",
     "@typescript-eslint/parser": "^8.26.1",
     "eslint": "^9.22.0",
+    "rimraf": "^6.0.1",
     "rollup": "^4.35.0",
     "tslib": "^2.8.1",
     "typescript": "^5.8.2",

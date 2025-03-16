@@ -1,46 +1,89 @@
 {
-  "name": "@elsikora/pluralizer",
-  "version": "1.0.0",
-  "description": "A library for pluralizing words in different languages",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "npm run prebuild && rollup -c",
-    "test:all": "npm run test:unit && npm run test:e2e",
-    "test:e2e": "npm run build && vitest --config vitest.config.e2e.ts --typecheck.tsconfig tsconfig.json",
-    "test:unit": "vitest run test/unit --config vitest.config.unit.ts"
-  },
-  "homepage": "https://github.com/ElsiKora/Pluralizer#readme",
-  "bugs": {
-    "url": "https://github.com/ElsiKora/Pluralizer/issues"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ElsiKora/Pluralizer"
-  },
-  "type": "module",
-  "keywords": [
-    "pluralize",
-    "pluralization",
-    "english",
-    "russian",
-    "i18n"
-  ],
-  "author": "ElsiKora",
-  "license": "MIT",
-  "devDependencies": {
-    "@rollup/plugin-typescript": "^12.1.2",
-    "@typescript-eslint/eslint-plugin": "^8.26.1",
-    "@typescript-eslint/parser": "^8.26.1",
-    "eslint": "^9.22.0",
-    "rimraf": "^6.0.1",
-    "rollup": "^4.35.0",
-    "tslib": "^2.8.1",
-    "typescript": "^5.8.2",
-    "vitest": "^3.0.8"
-  }
+	"name": "@elsikora/pluralizer",
+	"version": "1.0.0",
+	"description": "A library for pluralizing words in different languages",
+	"exports": {
+		".": {
+			"import": "./dist/esm/index.js",
+			"require": "./dist/cjs/index.js"
+		}
+	},
+	"files": [
+		"./dist"
+	],
+	"scripts": {
+		"prebuild": "rimraf dist",
+		"build": "npm run prebuild && rollup -c",
+		"commit": "cz",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint ./",
+		"lint:all": "npm run lint && npm run lint:types",
+		"lint:all:fix": "npm run lint:fix && npm run lint:types:fix",
+		"lint:fix": "eslint --fix ./",
+		"lint:types": "tsc --noEmit",
+		"lint:types:fix": "tsc --noEmit --skipLibCheck",
+		"prepare": "husky",
+		"release": "semantic-release",
+		"test:all": "npm run test:unit && npm run test:e2e",
+		"test:e2e": "npm run build && vitest --config vitest.config.e2e.js --typecheck.tsconfig tsconfig.json",
+		"test:unit": "vitest run test/unit --config vitest.config.unit.js"
+	},
+	"homepage": "https://github.com/ElsiKora/Pluralizer#readme",
+	"bugs": {
+		"url": "https://github.com/ElsiKora/Pluralizer/issues"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ElsiKora/Pluralizer"
+	},
+	"type": "module",
+	"keywords": [
+		"pluralize",
+		"pluralization",
+		"english",
+		"russian",
+		"i18n"
+	],
+	"author": "ElsiKora",
+	"license": "MIT",
+	"devDependencies": {
+		"@commitlint/cli": "^19.8.0",
+		"@commitlint/config-conventional": "^19.8.0",
+		"@elsikora/commitizen-plugin-commitlint-ai": "^1.0.0",
+		"@elsikora/eslint-config": "^3.7.6",
+		"@rollup/plugin-typescript": "^12.1.2",
+		"@saithodev/semantic-release-backmerge": "^4.0.1",
+		"@semantic-release/changelog": "^6.0.3",
+		"@semantic-release/commit-analyzer": "^13.0.1",
+		"@semantic-release/git": "^10.0.1",
+		"@semantic-release/github": "^11.0.1",
+		"@semantic-release/npm": "^12.0.1",
+		"@semantic-release/release-notes-generator": "^14.0.3",
+		"@typescript-eslint/eslint-plugin": "^8.26.1",
+		"@typescript-eslint/parser": "^8.26.1",
+		"@vitest/coverage-v8": "^3.0.8",
+		"commitizen": "^4.3.1",
+		"conventional-changelog-conventionalcommits": "^8.0.0",
+		"eslint": "^9.22.0",
+		"eslint-plugin-n": "^17.16.2",
+		"eslint-plugin-no-secrets": "^2.2.1",
+		"husky": "^9.1.7",
+		"lint-staged": "^15.5.0",
+		"prettier": "^3.5.3",
+		"rimraf": "^6.0.1",
+		"rollup": "^4.35.0",
+		"semantic-release": "^24.2.3",
+		"tslib": "^2.8.1",
+		"typescript": "^5.8.2",
+		"vitest": "^3.0.8"
+	},
+	"config": {
+		"commitizen": {
+			"path": "@elsikora/commitizen-plugin-commitlint-ai"
+		}
+	}
 }

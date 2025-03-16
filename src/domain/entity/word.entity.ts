@@ -1,25 +1,26 @@
-import { Language } from '../type/language.type';
-import { Gender } from '../enum/gender.enum';
-import { WordProperties } from '../interface/word-properties.interface';
+import type { EGender } from "../enum/gender.enum";
+import type { IWordProperties } from "../interface/word-properties.interface";
+import type { TLanguage } from "../type/language.type";
 
 export class Word {
-  private readonly value: string;
-  private readonly properties: WordProperties;
+	private readonly PROPERTIES: IWordProperties;
 
-  constructor(value: string, properties: WordProperties) {
-    this.value = value;
-    this.properties = properties;
-  }
+	private readonly VALUE: string;
 
-  getValue(): string {
-    return this.value;
-  }
+	constructor(value: string, properties: IWordProperties) {
+		this.VALUE = value;
+		this.PROPERTIES = properties;
+	}
 
-  getLanguage(): Language {
-    return this.properties.language;
-  }
+	getGender(): EGender | undefined {
+		return this.PROPERTIES.gender;
+	}
 
-  getGender(): Gender | undefined {
-    return this.properties.gender;
-  }
+	getLanguage(): TLanguage {
+		return this.PROPERTIES.language;
+	}
+
+	getValue(): string {
+		return this.VALUE;
+	}
 }

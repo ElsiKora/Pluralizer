@@ -1,83 +1,81 @@
-import {Gender} from "../../domain/enum/gender.enum";
+/* eslint-disable @elsikora/typescript/no-magic-numbers */
+import type { IRule } from "../interface/rule.interface";
 
-export interface SpanishRule {
-  matches: (word: string, gender?: Gender) => boolean;
-  apply: (word: string) => string;
-}
+export const spanishPluralRules: Array<IRule> = [
+	// Special handling for words ending with 'ión' - they drop the accent in plural form
+	{
+		apply: (word: string): string => {
+			// Replace the accented letter with its unaccented version
+			if (word.endsWith("ón")) {
+				return `${word.slice(0, -2)}ones`;
+			} else if (word.endsWith("ión")) {
+				return `${word.slice(0, -3)}iones`;
+			}
 
-export const spanishPluralRules: SpanishRule[] = [
-  // Special handling for words ending with 'ión' - they drop the accent in plural form
-  {
-    matches: (word: string): boolean => /ón$/.test(word) || /ión$/.test(word),
-    apply: (word: string): string => {
-      // Replace the accented letter with its unaccented version
-      if (word.endsWith('ón')) {
-        return `${word.slice(0, -2)}ones`;
-      } else if (word.endsWith('ión')) {
-        return `${word.slice(0, -3)}iones`;
-      }
-      return word;
-    }
-  },
-  // Words ending in -z change to -ces (handle this first before consonant rule)
-  {
-    matches: (word: string): boolean => /z$/.test(word),
-    apply: (word: string): string => `${word.slice(0, -1)}ces`
-  },
-  // Words ending in unstressed vowel or 'é' add -s
-  {
-    matches: (word: string): boolean => /[aeiouáéíóúü]$|é$/.test(word),
-    apply: (word: string): string => `${word}s`
-  },
-  // Words ending in a consonant (but not z, which is handled separately) add -es
-  {
-    matches: (word: string): boolean => /[bcdfghjklmnñpqrstvwxy]$/.test(word),
-    apply: (word: string): string => `${word}es`
-  },
-  // Words ending in stressed vowels with an accent mark add -es and lose the accent
-  {
-    matches: (word: string): boolean => /[áíóú]$/.test(word),
-    apply: (word: string): string => {
-      const unaccented = word.replace(/á$/, 'a').replace(/í$/, 'i').replace(/ó$/, 'o').replace(/ú$/, 'u');
-      return `${unaccented}es`;
-    }
-  },
-  // Words ending in -s or -x with more than one syllable remain unchanged in plural form
-  {
-    matches: (word: string): boolean => (/[sx]$/.test(word) && word.length > 1),
-    apply: (word: string): string => word
-  }
+			return word;
+		},
+		matches: (word: string): boolean => word.endsWith("ón") || word.endsWith("ión"),
+	},
+	// Words ending in -z change to -ces (handle this first before consonant rule)
+	{
+		apply: (word: string): string => `${word.slice(0, -1)}ces`,
+		matches: (word: string): boolean => word.endsWith("z"),
+	},
+	// Words ending in unstressed vowel or 'é' add -s
+	{
+		apply: (word: string): string => `${word}s`,
+		matches: (word: string): boolean => /[aeiouáéíóúü]$/.test(word),
+	},
+	// Words ending in a consonant (but not z, which is handled separately) add -es
+	{
+		apply: (word: string): string => `${word}es`,
+		matches: (word: string): boolean => /[bcdfghj-nñp-tv-y]$/.test(word),
+	},
+	// Words ending in stressed vowels with an accent mark add -es and lose the accent
+	{
+		apply: (word: string): string => {
+			const unaccented: string = word.replace(/á$/, "a").replace(/í$/, "i").replace(/ó$/, "o").replace(/ú$/, "u");
+
+			return `${unaccented}es`;
+		},
+		matches: (word: string): boolean => /[áíóú]$/.test(word),
+	},
+	// Words ending in -s or -x with more than one syllable remain unchanged in plural form
+	{
+		apply: (word: string): string => word,
+		matches: (word: string): boolean => /[sx]$/.test(word) && word.length > 1,
+	},
 ];
 
-export const spanishSingularRules: SpanishRule[] = [
-  // Words ending in -iones (singular form ends in -ión)
-  {
-    matches: (word: string): boolean => /iones$/.test(word),
-    apply: (word: string): string => `${word.slice(0, -5)}ión`
-  },
-  // Words ending in -ones (singular form usually ends in -ón)
-  {
-    matches: (word: string): boolean => /ones$/.test(word) && !/ciones$/.test(word) && !/[aeiou]iones$/.test(word),
-    apply: (word: string): string => `${word.slice(0, -4)}ón`
-  },
-  // Words ending in -ces (plural of -z)
-  {
-    matches: (word: string): boolean => /ces$/.test(word) && word.length > 3,
-    apply: (word: string): string => `${word.slice(0, -3)}z`
-  },
-  // Words ending in -es where the singular ends in a consonant
-  {
-    matches: (word: string): boolean => /[^aeiouáéíóúü]es$/.test(word) && word.length > 2,
-    apply: (word: string): string => word.slice(0, -2)
-  },
-  // Words ending in -s that are the same in singular and plural (like 'crisis')
-  {
-    matches: (word: string): boolean => /[^aeiouáéíóúü]s$/.test(word) && word.length > 1,
-    apply: (word: string): string => word
-  },
-  // Basic -s removal for words ending in vowel + s
-  {
-    matches: (word: string): boolean => /[aeiouáéíóúü]s$/.test(word) && word.length > 1,
-    apply: (word: string): string => word.slice(0, -1)
-  }
+export const spanishSingularRules: Array<IRule> = [
+	// Words ending in -iones (singular form ends in -ión)
+	{
+		apply: (word: string): string => `${word.slice(0, -5)}ión`,
+		matches: (word: string): boolean => word.endsWith("iones"),
+	},
+	// Words ending in -ones (singular form usually ends in -ón)
+	{
+		apply: (word: string): string => `${word.slice(0, -4)}ón`,
+		matches: (word: string): boolean => word.endsWith("ones") && !word.endsWith("ciones") && !/[aeiou]iones$/.test(word),
+	},
+	// Words ending in -ces (plural of -z)
+	{
+		apply: (word: string): string => `${word.slice(0, -3)}z`,
+		matches: (word: string): boolean => word.endsWith("ces") && word.length > 3,
+	},
+	// Words ending in -es where the singular ends in a consonant
+	{
+		apply: (word: string): string => word.slice(0, -2),
+		matches: (word: string): boolean => /[^aeiouáéíóúü]es$/.test(word) && word.length > 2,
+	},
+	// Words ending in -s that are the same in singular and plural (like 'crisis')
+	{
+		apply: (word: string): string => word,
+		matches: (word: string): boolean => /[^aeiouáéíóúü]s$/.test(word) && word.length > 1,
+	},
+	// Basic -s removal for words ending in vowel + s
+	{
+		apply: (word: string): string => word.slice(0, -1),
+		matches: (word: string): boolean => /[aeiouáéíóúü]s$/.test(word) && word.length > 1,
+	},
 ];

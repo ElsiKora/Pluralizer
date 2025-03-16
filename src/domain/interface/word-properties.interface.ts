@@ -1,7 +1,7 @@
-import {Language} from "../type/language.type";
-import {Gender} from "../enum/gender.enum";
+import type { EGender } from "../enum/gender.enum";
+import type { TLanguage } from "../type/language.type";
 
-export interface WordProperties {
-  language: Language;
-  gender?: Gender;
+export interface IWordProperties {
+	gender?: EGender;
+	language: TLanguage;
 }

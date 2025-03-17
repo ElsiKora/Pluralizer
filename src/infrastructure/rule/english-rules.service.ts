@@ -71,7 +71,7 @@ export const englishPluralRules: Array<IRule> = [
 	// Default rule: add s
 	{
 		apply: (word: string): string => `${word}s`,
-		matches: (word: string): boolean => true,
+		matches: (_word: string): boolean => true,
 	},
 ];
 

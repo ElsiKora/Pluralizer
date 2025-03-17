@@ -1,6 +1,6 @@
 {
 	"name": "@elsikora/pluralizer",
-	"version": "1.2.0",
+	"version": "1.0.0-dev.1",
 	"description": "A library for pluralizing words in different languages",
 	"exports": {
 		".": {
@@ -54,7 +54,7 @@
 		"@commitlint/cli": "^19.8.0",
 		"@commitlint/config-conventional": "^19.8.0",
 		"@elsikora/commitizen-plugin-commitlint-ai": "^1.0.0",
-		"@elsikora/eslint-config": "^3.7.6",
+		"@elsikora/eslint-config": "^3.7.7",
 		"@rollup/plugin-typescript": "^12.1.2",
 		"@saithodev/semantic-release-backmerge": "^4.0.1",
 		"@semantic-release/changelog": "^6.0.3",

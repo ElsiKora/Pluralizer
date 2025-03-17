@@ -2,15 +2,21 @@
 import type { ICasePreserver } from "../interface/case-preserver.interface";
 
 export const CasePreserver: ICasePreserver = {
+	/**
+	 * Applies the case pattern from the original string to the modified string
+	 * @param {string} original - The original string with the case pattern to preserve
+	 * @param {string} modified - The modified string to apply the case pattern to
+	 * @returns {string} The modified string with the original's case pattern applied
+	 */
 	preserveCase(original: string, modified: string): string {
 		if (!original || !modified) return modified || "";
 
-		// Handle all uppercase
+		// Handle all uppercase - string contains uppercase letters and no lowercase letters
 		if (/^[^a-zа-яёñáéíóúü]*$/.test(original) && /[A-ZА-ЯЁÑÁÉÍÓÚÜ]/.test(original)) {
 			return modified.toUpperCase();
 		}
 
-		// Handle capitalized
+		// Handle capitalized - string starts with uppercase letter followed by all lowercase
 		if (/^[^a-zA-Zа-яА-ЯёЁñÑáÁéÉíÍóÓúÚüÜ]*[A-ZА-ЯЁÑÁÉÍÓÚÜ][^A-ZА-ЯЁÑÁÉÍÓÚÜ]*$/.test(original)) {
 			const firstLetterMatch: null | RegExpExecArray = /[a-zа-яёñáéíóúü]/i.exec(modified);
 
@@ -23,7 +29,7 @@ export const CasePreserver: ICasePreserver = {
 			return modified.toLowerCase();
 		}
 
-		// Handle mixed case
+		// Handle mixed case - string contains both uppercase and lowercase letters
 		if (/[A-ZА-ЯЁÑÁÉÍÓÚÜ]/.test(original) && /[a-zа-яёñáéíóúü]/.test(original)) {
 			let result: string = modified.toLowerCase();
 
@@ -32,7 +38,7 @@ export const CasePreserver: ICasePreserver = {
 			let wordStart: number = 0;
 			let isInWord: boolean = false;
 
-			// First extract words
+			// First extract words from original string
 			for (let index: number = 0; index < original.length; index++) {
 				const char: string = original[index];
 				const isLetter: boolean = /[a-zA-Zа-яА-ЯёЁñÑáÁéÉíÍóÓúÚüÜ]/.test(char);
@@ -58,7 +64,7 @@ export const CasePreserver: ICasePreserver = {
 				});
 			}
 
-			// Now process the modified string
+			// Extract words from modified string
 			const modifiedWords: Array<{ end: number; start: number; text: string }> = [];
 			wordStart = 0;
 			isInWord = false;
@@ -88,7 +94,7 @@ export const CasePreserver: ICasePreserver = {
 				});
 			}
 
-			// For each word, maintain the capitalization pattern from the original
+			// Apply original case pattern to modified words
 			for (let wordIndex: number = 0; wordIndex < Math.min(words.length, modifiedWords.length); wordIndex++) {
 				const originalWord: { end: number; start: number; text: string } = words[wordIndex];
 				const modifiedWord: { end: number; start: number; text: string } = modifiedWords[wordIndex];
@@ -116,6 +122,7 @@ export const CasePreserver: ICasePreserver = {
 			return result;
 		}
 
+		// Default to lowercase for all other cases
 		return modified.toLowerCase();
 	},
 };

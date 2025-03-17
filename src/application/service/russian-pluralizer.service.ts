@@ -7,11 +7,15 @@ import { russianIrregularPlurals, russianIrregularSingulars, russianUncountableW
 import { russianPluralRules, russianSingularRules } from "../../infrastructure/rule/russian-rules.service";
 import { CasePreserver } from "../../infrastructure/utility/case-preserver.utility";
 
+/**
+ * Russian language implementation of the pluralizer
+ * @implements {IPluralizer}
+ */
 export class RussianPluralizer implements IPluralizer {
 	/**
 	 * Determines if a word is in plural form
-	 * @param word - The word to check
-	 * @returns True if the word is plural, false otherwise
+	 * @param {string} word - The word to check
+	 * @returns {boolean} True if the word is plural, false otherwise
 	 */
 	isPlural(word: string): boolean {
 		const lowerWord: string = word.toLowerCase();
@@ -32,8 +36,8 @@ export class RussianPluralizer implements IPluralizer {
 
 	/**
 	 * Determines if a word is in singular form
-	 * @param word - The word to check
-	 * @returns True if the word is singular, false otherwise
+	 * @param {string} word - The word to check
+	 * @returns {boolean} True if the word is singular, false otherwise
 	 */
 	isSingular(word: string): boolean {
 		const lowerWord: string = word.toLowerCase();
@@ -54,9 +58,9 @@ export class RussianPluralizer implements IPluralizer {
 
 	/**
 	 * Pluralizes a word based on a count
-	 * @param word - The Word object to pluralize
-	 * @param count - The count to determine if pluralization is needed
-	 * @returns The pluralized word or original if count is 1
+	 * @param {Word} word - The Word object to pluralize
+	 * @param {number} count - The count to determine if pluralization is needed
+	 * @returns {string} The pluralized word or original if count is 1
 	 */
 	// eslint-disable-next-line @elsikora/typescript/no-magic-numbers
 	pluralize(word: Word, count: number = 2): string {
@@ -80,6 +84,12 @@ export class RussianPluralizer implements IPluralizer {
 		return this.toPlural(value, word.getGender());
 	}
 
+	/**
+	 * Converts a word to its plural form
+	 * @param {string} word - The word to convert to plural
+	 * @param {EGender} [gender] - Optional grammatical gender to help with pluralization rules
+	 * @returns {string} The plural form of the word
+	 */
 	toPlural(word: string, gender?: EGender): string {
 		const lowerWord: string = word.toLowerCase();
 
@@ -123,6 +133,11 @@ export class RussianPluralizer implements IPluralizer {
 		return word;
 	}
 
+	/**
+	 * Converts a word to its singular form
+	 * @param {string} word - The word to convert to singular
+	 * @returns {string} The singular form of the word
+	 */
 	toSingular(word: string): string {
 		const lowerWord: string = word.toLowerCase();
 

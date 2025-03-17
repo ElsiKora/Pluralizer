@@ -6,11 +6,15 @@ import { englishFalsePluralWords, englishIrregularPlurals, englishIrregularSingu
 import { englishPluralRules, englishSingularRules } from "../../infrastructure/rule/english-rules.service";
 import { CasePreserver } from "../../infrastructure/utility/case-preserver.utility";
 
+/**
+ * English language implementation of the pluralizer
+ * @implements {IPluralizer}
+ */
 export class EnglishPluralizer implements IPluralizer {
 	/**
 	 * Determines if a word is in plural form
-	 * @param word - The word to check
-	 * @returns True if the word is plural, false otherwise
+	 * @param {string} word - The word to check
+	 * @returns {boolean} True if the word is plural, false otherwise
 	 */
 	isPlural(word: string): boolean {
 		const lowerWord: string = word.toLowerCase();
@@ -36,8 +40,8 @@ export class EnglishPluralizer implements IPluralizer {
 
 	/**
 	 * Determines if a word is in singular form
-	 * @param word - The word to check
-	 * @returns True if the word is singular, false otherwise
+	 * @param {string} word - The word to check
+	 * @returns {boolean} True if the word is singular, false otherwise
 	 */
 	isSingular(word: string): boolean {
 		const lowerWord: string = word.toLowerCase();
@@ -58,9 +62,9 @@ export class EnglishPluralizer implements IPluralizer {
 
 	/**
 	 * Pluralizes a word based on a count
-	 * @param word - The Word object to pluralize
-	 * @param count - The count to determine if pluralization is needed
-	 * @returns The pluralized word or original if count is 1
+	 * @param {Word} word - The Word object to pluralize
+	 * @param {number} count - The count to determine if pluralization is needed
+	 * @returns {string} The pluralized word or original if count is 1
 	 */
 	// eslint-disable-next-line @elsikora/typescript/no-magic-numbers
 	pluralize(word: Word, count: number = 2): string {
@@ -81,8 +85,8 @@ export class EnglishPluralizer implements IPluralizer {
 
 	/**
 	 * Converts a word to its plural form
-	 * @param word - The word to convert to plural
-	 * @returns The plural form of the word
+	 * @param {string} word - The word to convert to plural
+	 * @returns {string} The plural form of the word
 	 */
 	toPlural(word: string): string {
 		const lowerWord: string = word.toLowerCase();
@@ -115,8 +119,8 @@ export class EnglishPluralizer implements IPluralizer {
 
 	/**
 	 * Converts a word to its singular form
-	 * @param word - The word to convert to singular
-	 * @returns The singular form of the word
+	 * @param {string} word - The word to convert to singular
+	 * @returns {string} The singular form of the word
 	 */
 	toSingular(word: string): string {
 		const lowerWord: string = word.toLowerCase();

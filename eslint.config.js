@@ -9,7 +9,7 @@ export default [
 	...(await createConfig({
 		withCheckFile: true,
 		withJavascript: true,
-		withJsDoc: false,
+		withJsDoc: true,
 		withJson: true,
 		withMarkdown: true,
 		withNode: true,

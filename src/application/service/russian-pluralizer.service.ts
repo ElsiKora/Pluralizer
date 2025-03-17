@@ -1,43 +1,63 @@
 import type { Word } from "../../domain/entity/word.entity";
 import type { IPluralizer } from "../../domain/interface/pluralizer.interface";
+import type { IRule } from "../../infrastructure/interface/rule.interface";
 
 import { EGender } from "../../domain/enum/gender.enum";
 import { russianIrregularPlurals, russianIrregularSingulars, russianUncountableWords } from "../../infrastructure/exception/russian-exceptions.service";
 import { russianPluralRules, russianSingularRules } from "../../infrastructure/rule/russian-rules.service";
+import { CasePreserver } from "../../infrastructure/utility/case-preserver.utility";
 
 export class RussianPluralizer implements IPluralizer {
+	/**
+	 * Determines if a word is in plural form
+	 * @param word - The word to check
+	 * @returns True if the word is plural, false otherwise
+	 */
 	isPlural(word: string): boolean {
-		// Check if word is uncountable (inherently plural in Russian)
-		if (russianUncountableWords.includes(word.toLowerCase())) {
-			return true;
-		}
-
 		const lowerWord: string = word.toLowerCase();
 
-		// Check if word is an irregular plural
-		if (Object.values(russianIrregularSingulars).includes(lowerWord)) {
+		// Uncountable words are neither singular nor plural
+		if (russianUncountableWords.includes(lowerWord)) {
 			return false;
 		}
 
-		if (Object.keys(russianIrregularSingulars).includes(lowerWord)) {
+		// If it's in our irregular plurals list, it's plural
+		if (Object.values(russianIrregularPlurals).includes(lowerWord)) {
 			return true;
 		}
 
-		// For simplicity, we check common plural endings
-		// This is not 100% accurate for all cases
-		return /[ыи]$/.test(lowerWord);
+		// If it matches any of our singularization rules, it's likely plural
+		return russianSingularRules.some((rule: IRule) => rule.matches(lowerWord)) || /[ыи]$/.test(lowerWord);
 	}
 
+	/**
+	 * Determines if a word is in singular form
+	 * @param word - The word to check
+	 * @returns True if the word is singular, false otherwise
+	 */
 	isSingular(word: string): boolean {
-		// Check if word is uncountable (inherently plural in Russian)
-		if (russianUncountableWords.includes(word.toLowerCase())) {
-			return false;
+		const lowerWord: string = word.toLowerCase();
+
+		// Uncountable words can be considered singular
+		if (russianUncountableWords.includes(lowerWord)) {
+			return true;
 		}
 
-		// Not plural usually means singular
-		return !this.isPlural(word);
+		// If it's in our irregular singulars list, it's singular
+		if (Object.keys(russianIrregularPlurals).includes(lowerWord)) {
+			return true;
+		}
+
+		// If it's not plural, it's likely singular
+		return !this.isPlural(lowerWord);
 	}
 
+	/**
+	 * Pluralizes a word based on a count
+	 * @param word - The Word object to pluralize
+	 * @param count - The count to determine if pluralization is needed
+	 * @returns The pluralized word or original if count is 1
+	 */
 	// eslint-disable-next-line @elsikora/typescript/no-magic-numbers
 	pluralize(word: Word, count: number = 2): string {
 		const value: string = word.getValue();
@@ -73,19 +93,16 @@ export class RussianPluralizer implements IPluralizer {
 			return word;
 		}
 
-		// Check irregular forms
+		// Check for irregular forms
 		if (russianIrregularPlurals[lowerWord]) {
-			// Preserve original capitalization
-			const irregular: string = russianIrregularPlurals[lowerWord];
-
-			return this.preserveCase(word, irregular);
+			return CasePreserver.preserveCase(word, russianIrregularPlurals[lowerWord]);
 		}
 
 		// Apply regular rules if gender is provided
 		if (gender) {
 			for (const rule of russianPluralRules) {
 				if (rule.matches(lowerWord, gender)) {
-					return this.preserveCase(word, rule.apply(lowerWord));
+					return CasePreserver.preserveCase(word, rule.apply(lowerWord));
 				}
 			}
 		} else {
@@ -96,7 +113,7 @@ export class RussianPluralizer implements IPluralizer {
 			for (const testGender of genders) {
 				for (const rule of russianPluralRules) {
 					if (rule.matches(lowerWord, testGender)) {
-						return this.preserveCase(word, rule.apply(lowerWord));
+						return CasePreserver.preserveCase(word, rule.apply(lowerWord));
 					}
 				}
 			}
@@ -119,12 +136,9 @@ export class RussianPluralizer implements IPluralizer {
 			return word;
 		}
 
-		// Check irregular forms
+		// Check for irregular forms
 		if (russianIrregularSingulars[lowerWord]) {
-			// Preserve original capitalization
-			const irregular: string = russianIrregularSingulars[lowerWord];
-
-			return this.preserveCase(word, irregular);
+			return CasePreserver.preserveCase(word, russianIrregularSingulars[lowerWord]);
 		}
 
 		// Apply regular rules - for Russian, we need to guess the gender
@@ -134,27 +148,12 @@ export class RussianPluralizer implements IPluralizer {
 		for (const gender of genders) {
 			for (const rule of russianSingularRules) {
 				if (rule.matches(lowerWord, gender)) {
-					return this.preserveCase(word, rule.apply(lowerWord));
+					return CasePreserver.preserveCase(word, rule.apply(lowerWord));
 				}
 			}
 		}
 
 		// If no rules match, return the original
 		return word;
-	}
-
-	private preserveCase(original: string, modified: string): string {
-		// If original is all uppercase
-		if (original === original.toUpperCase()) {
-			return modified.toUpperCase();
-		}
-
-		// If original is capitalized
-		if (original.startsWith(original[0].toUpperCase())) {
-			return modified.charAt(0).toUpperCase() + modified.slice(1);
-		}
-
-		// Otherwise, use lowercase
-		return modified.toLowerCase();
 	}
 }

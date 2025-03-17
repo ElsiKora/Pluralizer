@@ -9,5 +9,5 @@
     "strict": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "src/test/**/*", "**/*.test.ts", "**/*.spec.ts", "**/*.test-data.ts", "dist"]
+  "exclude": ["node_modules", "dist"]
 }

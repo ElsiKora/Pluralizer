@@ -4,66 +4,90 @@ import type { IRule } from "../../infrastructure/interface/rule.interface";
 
 import { englishFalsePluralWords, englishIrregularPlurals, englishIrregularSingulars, englishUncountableWords } from "../../infrastructure/exception/english-exceptions.service";
 import { englishPluralRules, englishSingularRules } from "../../infrastructure/rule/english-rules.service";
+import { CasePreserver } from "../../infrastructure/utility/case-preserver.utility";
 
 export class EnglishPluralizer implements IPluralizer {
+	/**
+	 * Determines if a word is in plural form
+	 * @param word - The word to check
+	 * @returns True if the word is plural, false otherwise
+	 */
 	isPlural(word: string): boolean {
-		if (englishUncountableWords.includes(word.toLowerCase())) {
+		const lowerWord: string = word.toLowerCase();
+
+		// Uncountable words are neither singular nor plural
+		if (englishUncountableWords.includes(lowerWord)) {
 			return false;
 		}
 
-		const lowerWord: string = word.toLowerCase();
-
-		// Check if word is a false plural
+		// False plurals are not actually plural despite looking like it
 		if (englishFalsePluralWords.includes(lowerWord)) {
 			return false;
 		}
 
-		// Check if word is an irregular plural
+		// If it's in our irregular plurals list, it's plural
 		if (Object.values(englishIrregularPlurals).includes(lowerWord)) {
 			return true;
 		}
 
-		// Apply rules to check if it's a plural form
+		// If it matches any of our singularization rules, it's likely plural
 		return englishSingularRules.some((rule: IRule) => rule.matches(lowerWord));
 	}
 
+	/**
+	 * Determines if a word is in singular form
+	 * @param word - The word to check
+	 * @returns True if the word is singular, false otherwise
+	 */
 	isSingular(word: string): boolean {
-		if (englishUncountableWords.includes(word.toLowerCase())) {
+		const lowerWord: string = word.toLowerCase();
+
+		// Uncountable words can be considered singular
+		if (englishUncountableWords.includes(lowerWord)) {
 			return true;
 		}
 
-		const lowerWord: string = word.toLowerCase();
-
-		// Check if word is an irregular singular
+		// If it's in our irregular singulars list, it's singular
 		if (Object.keys(englishIrregularPlurals).includes(lowerWord)) {
 			return true;
 		}
 
-		// Not plural usually means singular
+		// If it's not plural, it's likely singular
 		return !this.isPlural(lowerWord);
 	}
 
+	/**
+	 * Pluralizes a word based on a count
+	 * @param word - The Word object to pluralize
+	 * @param count - The count to determine if pluralization is needed
+	 * @returns The pluralized word or original if count is 1
+	 */
 	// eslint-disable-next-line @elsikora/typescript/no-magic-numbers
 	pluralize(word: Word, count: number = 2): string {
 		const value: string = word.getValue();
+
+		// Check if word is English
+		if (word.getLanguage() !== "en") {
+			throw new Error("EnglishPluralizerService can only pluralize English words");
+		}
 
 		// If count is 1, return singular form
 		if (count === 1) {
 			return value;
 		}
 
-		// Check if word is English
-		if (word.getLanguage() !== "en") {
-			throw new Error("EnglishPluralizer can only pluralize English words");
-		}
-
 		return this.toPlural(value);
 	}
 
+	/**
+	 * Converts a word to its plural form
+	 * @param word - The word to convert to plural
+	 * @returns The plural form of the word
+	 */
 	toPlural(word: string): string {
 		const lowerWord: string = word.toLowerCase();
 
-		// Check if word is uncountable (same in singular and plural)
+		// Check if word is uncountable
 		if (englishUncountableWords.includes(lowerWord)) {
 			return word;
 		}
@@ -73,18 +97,15 @@ export class EnglishPluralizer implements IPluralizer {
 			return word;
 		}
 
-		// Check irregular forms
+		// Check for irregular forms
 		if (englishIrregularPlurals[lowerWord]) {
-			// Preserve original capitalization
-			const irregular: string = englishIrregularPlurals[lowerWord];
-
-			return this.preserveCase(word, irregular);
+			return CasePreserver.preserveCase(word, englishIrregularPlurals[lowerWord]);
 		}
 
 		// Apply regular rules
 		for (const rule of englishPluralRules) {
 			if (rule.matches(lowerWord)) {
-				return this.preserveCase(word, rule.apply(lowerWord));
+				return CasePreserver.preserveCase(word, rule.apply(lowerWord));
 			}
 		}
 
@@ -92,10 +113,15 @@ export class EnglishPluralizer implements IPluralizer {
 		return `${word}s`;
 	}
 
+	/**
+	 * Converts a word to its singular form
+	 * @param word - The word to convert to singular
+	 * @returns The singular form of the word
+	 */
 	toSingular(word: string): string {
 		const lowerWord: string = word.toLowerCase();
 
-		// Check if word is uncountable (same in singular and plural)
+		// Check if word is uncountable
 		if (englishUncountableWords.includes(lowerWord)) {
 			return word;
 		}
@@ -105,37 +131,19 @@ export class EnglishPluralizer implements IPluralizer {
 			return word;
 		}
 
-		// Check irregular forms
+		// Check for irregular forms
 		if (englishIrregularSingulars[lowerWord]) {
-			// Preserve original capitalization
-			const irregular: string = englishIrregularSingulars[lowerWord];
-
-			return this.preserveCase(word, irregular);
+			return CasePreserver.preserveCase(word, englishIrregularSingulars[lowerWord]);
 		}
 
 		// Apply regular rules
 		for (const rule of englishSingularRules) {
 			if (rule.matches(lowerWord)) {
-				return this.preserveCase(word, rule.apply(lowerWord));
+				return CasePreserver.preserveCase(word, rule.apply(lowerWord));
 			}
 		}
 
 		// If no rules match, return the original
 		return word;
-	}
-
-	private preserveCase(original: string, modified: string): string {
-		// If original is all uppercase
-		if (original === original.toUpperCase()) {
-			return modified.toUpperCase();
-		}
-
-		// If original is capitalized
-		if (original.startsWith(original[0].toUpperCase())) {
-			return modified.charAt(0).toUpperCase() + modified.slice(1);
-		}
-
-		// Otherwise, use lowercase
-		return modified.toLowerCase();
 	}
 }

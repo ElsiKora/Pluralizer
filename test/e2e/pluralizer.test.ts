@@ -15,21 +15,11 @@ describe("Pluralizer API (End-to-End)", () => {
 			expect(pluralizer.pluralize("окно", { language: "ru", gender: EGender.NEUTER })).toBe("окна");
 		});
 
-		it("should pluralize Spanish words", () => {
-			expect(pluralizer.pluralize("libro", { language: "es" })).toBe("libros");
-			expect(pluralizer.pluralize("casa", { language: "es" })).toBe("casas");
-			expect(pluralizer.pluralize("papel", { language: "es" })).toBe("papeles");
-			expect(pluralizer.pluralize("luz", { language: "es" })).toBe("luces");
-		});
-
 		it("should detect language automatically", () => {
 			expect(pluralizer.pluralize("книга", { gender: EGender.FEMININE })).toBe("книги");
 			expect(pluralizer.pluralize("стол", { gender: EGender.MASCULINE })).toBe("столы");
 			expect(pluralizer.pluralize("book")).toBe("books");
 			expect(pluralizer.pluralize("child")).toBe("children");
-			// Spanish words with special characters should be detected
-			expect(pluralizer.pluralize("lápiz")).toBe("lápices");
-			expect(pluralizer.pluralize("habitación")).toBe("habitaciones");
 		});
 
 		it("should respect count parameter", () => {
@@ -37,89 +27,55 @@ describe("Pluralizer API (End-to-End)", () => {
 			expect(pluralizer.pluralize("book", { count: 2 })).toBe("books");
 			expect(pluralizer.pluralize("книга", { language: "ru", gender: EGender.FEMININE, count: 1 })).toBe("книга");
 			expect(pluralizer.pluralize("книга", { language: "ru", gender: EGender.FEMININE, count: 2 })).toBe("книги");
-			expect(pluralizer.pluralize("libro", { language: "es", count: 1 })).toBe("libro");
-			expect(pluralizer.pluralize("libro", { language: "es", count: 2 })).toBe("libros");
 		});
 
 		it("should check if word is plural", () => {
-			// English
 			expect(pluralizer.isPlural("books")).toBe(true);
 			expect(pluralizer.isPlural("book")).toBe(false);
 			expect(pluralizer.isPlural("children")).toBe(true);
 			expect(pluralizer.isPlural("child")).toBe(false);
 
-			// Russian
 			expect(pluralizer.isPlural("книги", "ru")).toBe(true);
 			expect(pluralizer.isPlural("книга", "ru")).toBe(false);
 			expect(pluralizer.isPlural("столы", "ru")).toBe(true);
 			expect(pluralizer.isPlural("стол", "ru")).toBe(false);
-
-			// Spanish
-			expect(pluralizer.isPlural("libros", "es")).toBe(true);
-			expect(pluralizer.isPlural("libro", "es")).toBe(false);
-			expect(pluralizer.isPlural("casas", "es")).toBe(true);
-			expect(pluralizer.isPlural("casa", "es")).toBe(false);
 		});
 
 		it("should check if word is singular", () => {
-			// English
 			expect(pluralizer.isSingular("book")).toBe(true);
 			expect(pluralizer.isSingular("books")).toBe(false);
 			expect(pluralizer.isSingular("child")).toBe(true);
 			expect(pluralizer.isSingular("children")).toBe(false);
 
-			// Russian
 			expect(pluralizer.isSingular("книга", "ru")).toBe(true);
 			expect(pluralizer.isSingular("книги", "ru")).toBe(false);
 			expect(pluralizer.isSingular("стол", "ru")).toBe(true);
 			expect(pluralizer.isSingular("столы", "ru")).toBe(false);
-
-			// Spanish
-			expect(pluralizer.isSingular("libro", "es")).toBe(true);
-			expect(pluralizer.isSingular("libros", "es")).toBe(false);
-			expect(pluralizer.isSingular("casa", "es")).toBe(true);
-			expect(pluralizer.isSingular("casas", "es")).toBe(false);
 		});
 
 		it("should convert to plural form", () => {
-			// English
 			expect(pluralizer.toPlural("book")).toBe("books");
 			expect(pluralizer.toPlural("child")).toBe("children");
 
-			// Russian
 			expect(pluralizer.toPlural("книга", { language: "ru", gender: EGender.FEMININE })).toBe("книги");
 			expect(pluralizer.toPlural("стол", { language: "ru", gender: EGender.MASCULINE })).toBe("столы");
-
-			// Spanish
-			expect(pluralizer.toPlural("libro", { language: "es" })).toBe("libros");
-			expect(pluralizer.toPlural("papel", { language: "es" })).toBe("papeles");
-			expect(pluralizer.toPlural("luz", { language: "es" })).toBe("luces");
 		});
 
 		it("should convert to singular form", () => {
-			// English
 			expect(pluralizer.toSingular("books")).toBe("book");
 			expect(pluralizer.toSingular("children")).toBe("child");
 
-			// Russian
 			expect(pluralizer.toSingular("книги", "ru")).toBe("книга");
 			expect(pluralizer.toSingular("столы", "ru")).toBe("стол");
-
-			// Spanish
-			expect(pluralizer.toSingular("libros", "es")).toBe("libro");
-			expect(pluralizer.toSingular("papeles", "es")).toBe("papel");
-			expect(pluralizer.toSingular("luces", "es")).toBe("luz");
 		});
 
 		it("should report supported languages", () => {
 			expect(pluralizer.getSupportedLanguages()).toContain("en");
 			expect(pluralizer.getSupportedLanguages()).toContain("ru");
-			expect(pluralizer.getSupportedLanguages()).toContain("es");
-			expect(pluralizer.getSupportedLanguages().length).toBe(3);
+			expect(pluralizer.getSupportedLanguages().length).toBe(2);
 
 			expect(pluralizer.supportsLanguage("en")).toBe(true);
 			expect(pluralizer.supportsLanguage("ru")).toBe(true);
-			expect(pluralizer.supportsLanguage("es")).toBe(true);
 		});
 	});
 
@@ -129,12 +85,10 @@ describe("Pluralizer API (End-to-End)", () => {
 
 			expect(customPluralizer.pluralize("book")).toBe("books");
 			expect(customPluralizer.pluralize("книга", { language: "ru", gender: EGender.FEMININE })).toBe("книги");
-			expect(customPluralizer.pluralize("libro", { language: "es" })).toBe("libros");
 		});
 	});
 
 	describe("Complex usage scenarios", () => {
-		// Отдельный тест для проблемных слов
 		it("should handle special words correctly", () => {
 			expect(pluralizer.toPlural("bus")).toBe("buses");
 			expect(pluralizer.toPlural("box")).toBe("boxes");
@@ -146,7 +100,6 @@ describe("Pluralizer API (End-to-End)", () => {
 			const words = ["book", "книга", "child", "стол", "окно"];
 			const expectedPlurals = ["books", "книги", "children", "столы", "окна"];
 
-			// We need to provide gender for Russian words because auto-detection only works for language
 			const genders = [undefined, EGender.FEMININE, undefined, EGender.MASCULINE, EGender.NEUTER];
 
 			words.forEach((word, index) => {
@@ -205,26 +158,7 @@ describe("Pluralizer API (End-to-End)", () => {
 			});
 		});
 
-		it("should handle Spanish irregular forms correctly", () => {
-			const irregulars = [
-				["el régimen", "los regímenes"],
-				["el carácter", "los caracteres"],
-				["crisis", "crisis"],
-				["lunes", "lunes"],
-				["jueves", "jueves"],
-				["análisis", "análisis"],
-				["tesis", "tesis"],
-				["virus", "virus"],
-			];
-
-			irregulars.forEach(([singular, plural]) => {
-				expect(pluralizer.toPlural(singular, { language: "es" })).toBe(plural);
-				expect(pluralizer.toSingular(plural, "es")).toBe(singular);
-			});
-		});
-
 		it("should handle uncountable words in all languages", () => {
-			// English uncountables
 			const enUncountables = ["equipment", "information", "rice", "money", "species", "series", "fish", "sheep", "deer", "aircraft", "software", "hardware", "furniture"];
 
 			enUncountables.forEach((word) => {
@@ -232,21 +166,10 @@ describe("Pluralizer API (End-to-End)", () => {
 				expect(pluralizer.toSingular(word)).toBe(word);
 			});
 
-			// Russian uncountables - для несчетных слов проверяем только toPlural,
-			// так как они уже во множественном числе и не могут быть преобразованы в единственное
 			const ruUncountables = ["ножницы", "брюки", "очки", "деньги", "духи", "джинсы", "каникулы", "переговоры"];
 
 			ruUncountables.forEach((word) => {
 				expect(pluralizer.toPlural(word, { language: "ru" })).toBe(word);
-				// Несчетные слова в русском не могут быть преобразованы в единственное число
-				// поэтому этот тест исключаем: expect(pluralizer.toSingular(word, 'ru')).toBe(word);
-			});
-
-			// Spanish uncountables
-			const esUncountables = ["crisis", "análisis", "tesis", "lunes", "martes", "miércoles", "jueves", "viernes", "virus", "gafas", "tijeras"];
-
-			esUncountables.forEach((word) => {
-				expect(pluralizer.toPlural(word, { language: "es" })).toBe(word);
 			});
 		});
 	});

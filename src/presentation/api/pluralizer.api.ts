@@ -7,7 +7,6 @@ import { PluralizerFactory } from "../../application/factory/pluralizer.factory"
 import { EnglishPluralizer } from "../../application/service/english-pluralizer.service";
 import { LanguageDetector } from "../../application/service/language-detector.service";
 import { RussianPluralizer } from "../../application/service/russian-pluralizer.service";
-import { SpanishPluralizer } from "../../application/service/spanish-pluralizer.service";
 import { Word } from "../../domain/entity/word.entity";
 
 export class Pluralizer {
@@ -22,7 +21,6 @@ export class Pluralizer {
 		// Register all supported pluralizers
 		(this.PLURALIZER_FACTORY as PluralizerFactory).registerPluralizer("en", new EnglishPluralizer());
 		(this.PLURALIZER_FACTORY as PluralizerFactory).registerPluralizer("ru", new RussianPluralizer());
-		(this.PLURALIZER_FACTORY as PluralizerFactory).registerPluralizer("es", new SpanishPluralizer());
 	}
 
 	/**

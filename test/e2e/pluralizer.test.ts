@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import pluralizer, { Pluralizer, EGender } from "../../dist/esm/index";
+import { Pluralizer, pluralizer, EGender } from "../../dist/esm/index";
 
 describe("Pluralizer API (End-to-End)", () => {
 	describe("Default export usage", () => {

@@ -3,12 +3,12 @@
 </p>
 
 <h1 align="center">Pluralizer 🔄</h1>
-<p align="center"><em>A powerful multilingual word pluralization library with zero dependencies</em></p>
+<p align="center"><em>A powerful, multilingual library for pluralizing and singularizing words</em></p>
 
 <p align="center">
     <a aria-label="ElsiKora logo" href="https://elsikora.com">
   <img src="https://img.shields.io/badge/MADE%20BY%20ElsiKora-333333.svg?style=for-the-badge" alt="ElsiKora">
-</a> <img src="https://img.shields.io/badge/npm-blue.svg?style=for-the-badge&logo=npm&logoColor=white" alt="npm"> <img src="https://img.shields.io/badge/version-brightgreen.svg?style=for-the-badge&logo=github&logoColor=white" alt="version"> <img src="https://img.shields.io/badge/license-blue.svg?style=for-the-badge&logo=license&logoColor=white" alt="license"> <img src="https://img.shields.io/badge/typescript-blue.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript"> <img src="https://img.shields.io/badge/coverage-brightgreen.svg?style=for-the-badge&logo=codecov&logoColor=white" alt="coverage"> <img src="https://img.shields.io/badge/zero-deps-brightgreen.svg?style=for-the-badge&logo=dependabot&logoColor=white" alt="zero-deps">
+</a> <img src="https://img.shields.io/badge/version-blue.svg?style=for-the-badge&logo=npm&logoColor=white" alt="version"> <img src="https://img.shields.io/badge/license-green.svg?style=for-the-badge&logo=license&logoColor=white" alt="license"> <img src="https://img.shields.io/badge/typescript-blue.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript"> <img src="https://img.shields.io/badge/codecov-brightgreen.svg?style=for-the-badge&logo=codecov&logoColor=white" alt="codecov"> <img src="https://img.shields.io/badge/dependencies-brightgreen.svg?style=for-the-badge&logo=npm&logoColor=white" alt="dependencies"> <img src="https://img.shields.io/badge/build-success.svg?style=for-the-badge&logo=github-actions&logoColor=white" alt="build">
 </p>
 
 
@@ -23,230 +23,314 @@
 
 
 ## 📖 Description
-Pluralizer is a robust, language-aware library for handling word pluralization and singularization across multiple languages. Built with a clean domain-driven architecture, it provides accurate word form transformations while respecting grammatical nuances specific to each supported language. Whether you're developing multilingual applications, content management systems, or natural language processing tools, Pluralizer offers a sophisticated solution for handling linguistic transformations with precision. The library currently supports English and Russian with plans to expand to other languages, making it ideal for developers working on global applications that require grammatically correct text generation.
+Pluralizer is a sophisticated, zero-dependency TypeScript library designed to handle word pluralization across multiple languages. Unlike simpler solutions, Pluralizer respects language-specific rules, grammatical gender, and irregular forms, ensuring linguistically correct transformations. It provides comprehensive support for English and Russian, with a flexible architecture that allows easy extension to other languages. Whether you're building an internationalized application, creating natural language interfaces, or developing educational tools, Pluralizer offers a robust solution for grammatically correct word transformations that maintains the nuances of each supported language.
 
 ## 🚀 Features
-- ✨ **Multi-language support with comprehensive handling of English and Russian**
-- ✨ **Automatic language detection for seamless integration in multilingual applications**
-- ✨ **Gender-aware pluralization for languages with grammatical gender**
-- ✨ **Extensive irregular word handling with carefully curated exception dictionaries**
-- ✨ **Preservation of original word capitalization and formatting**
-- ✨ **Zero dependencies for minimal footprint in your application**
-- ✨ **Comprehensive API with intuitive methods for pluralization, singularization, and form checking**
-- ✨ **TypeScript support with full type definitions for enhanced developer experience**
-- ✨ **Modular architecture allowing easy extension to additional languages**
-- ✨ **Built with domain-driven design principles for maintainability and extensibility**
+- ✨ **Zero dependencies - lightweight and portable**
+- ✨ **Full TypeScript support with comprehensive type definitions**
+- ✨ **Multilingual architecture with initial support for English and Russian**
+- ✨ **Gender-aware pluralization (especially important for Slavic languages)**
+- ✨ **Extensive handling of irregular plural forms in all supported languages**
+- ✨ **Automatic language detection based on character patterns**
+- ✨ **Case preservation for maintaining proper capitalization**
+- ✨ **Comprehensive API for checking if words are singular or plural**
+- ✨ **Clean domain-driven design architecture for easy extensibility**
+- ✨ **Modular design that allows adding new languages without modifying existing code**
+- ✨ **ESM and CommonJS module support for maximum compatibility**
+- ✨ **High test coverage with unit and end-to-end tests**
 
 ## 🛠 Installation
 ```bash
-# Using npm
+### NPM
+
 npm install @elsikora/pluralizer
 
-# Using yarn
+
+### Yarn
+
 yarn add @elsikora/pluralizer
 
-# Using pnpm
+
+### PNPM
+
 pnpm add @elsikora/pluralizer
 
-# Using bun
+
+### Bun
+
 bun add @elsikora/pluralizer
 
 
-Pluralizer has zero dependencies, so installation is quick and keeps your node_modules clean.
+### Direct Import (ESM)
+javascript
+import { pluralizer } from '@elsikora/pluralizer';
+
+
+### CommonJS Import
+javascript
+const { pluralizer } = require('@elsikora/pluralizer');
 ```
 
 ## 💡 Usage
 ## Basic Usage
 
-Pluralizer provides a default export that's ready to use with English words out of the box:
+The Pluralizer library provides a straightforward API for working with word pluralization in different languages. The simplest way to use it is with the default singleton instance:
 
 ```typescript
-import pluralizer from '@elsikora/pluralizer';
+import { pluralizer } from '@elsikora/pluralizer';
 
 // Simple English pluralization
-console.log(pluralizer.pluralize('book')); // 'books'
-console.log(pluralizer.pluralize('child')); // 'children'
-console.log(pluralizer.pluralize('box')); // 'boxes'
+console.log(pluralizer.pluralize('book'));  // Output: books
+console.log(pluralizer.pluralize('child')); // Output: children
+console.log(pluralizer.pluralize('box'));   // Output: boxes
 
-// Conditional pluralization based on count
-console.log(pluralizer.pluralize('book', { count: 1 })); // 'book'
-console.log(pluralizer.pluralize('book', { count: 2 })); // 'books'
+// Respect count parameter
+console.log(pluralizer.pluralize('book', { count: 1 })); // Output: book
+console.log(pluralizer.pluralize('book', { count: 2 })); // Output: books
 ```
 
-## Multilingual Support
+## Working with Multiple Languages
 
-Pluralizer can handle words in different languages and will automatically detect the language when possible:
+Pluralizer supports automatic language detection and explicit language specification:
 
 ```typescript
-import pluralizer, { EGender } from '@elsikora/pluralizer';
+import { pluralizer, EGender } from '@elsikora/pluralizer';
 
-// Russian words with explicit language and gender
-console.log(pluralizer.pluralize('книга', { language: 'ru', gender: EGender.FEMININE })); // 'книги'
-console.log(pluralizer.pluralize('стол', { language: 'ru', gender: EGender.MASCULINE })); // 'столы'
-console.log(pluralizer.pluralize('окно', { language: 'ru', gender: EGender.NEUTER })); // 'окна'
+// Russian pluralization (requires gender specification)
+console.log(pluralizer.pluralize('книга', { language: 'ru', gender: EGender.FEMININE })); // Output: книги
+console.log(pluralizer.pluralize('стол', { language: 'ru', gender: EGender.MASCULINE })); // Output: столы
+console.log(pluralizer.pluralize('окно', { language: 'ru', gender: EGender.NEUTER }));   // Output: окна
 
-// Automatic language detection works too
-console.log(pluralizer.pluralize('книга', { gender: EGender.FEMININE })); // 'книги'
-console.log(pluralizer.pluralize('book')); // 'books'
+// Automatic language detection
+console.log(pluralizer.pluralize('книга', { gender: EGender.FEMININE })); // Output: книги (detects Russian)
+console.log(pluralizer.pluralize('book')); // Output: books (detects English)
 ```
 
-## Working with Word Forms
+## Converting Between Singular and Plural Forms
 
-Check if words are in singular or plural form:
+Pluralizer provides methods to explicitly convert between singular and plural forms:
 
 ```typescript
-import pluralizer from '@elsikora/pluralizer';
+import { pluralizer, EGender } from '@elsikora/pluralizer';
 
-// Check English words
-console.log(pluralizer.isPlural('books')); // true
-console.log(pluralizer.isPlural('book')); // false
-console.log(pluralizer.isSingular('child')); // true
-console.log(pluralizer.isSingular('children')); // false
+// Converting to plural
+console.log(pluralizer.toPlural('book')); // Output: books
+console.log(pluralizer.toPlural('child')); // Output: children
+console.log(pluralizer.toPlural('книга', { gender: EGender.FEMININE })); // Output: книги
 
-// Check Russian words (specify language)
-console.log(pluralizer.isPlural('книги', 'ru')); // true
-console.log(pluralizer.isPlural('книга', 'ru')); // false
+// Converting to singular
+console.log(pluralizer.toSingular('books')); // Output: book
+console.log(pluralizer.toSingular('children')); // Output: child
+console.log(pluralizer.toSingular('книги', 'ru')); // Output: книга
 ```
 
-Explicitly convert between forms:
+## Checking Word Forms
+
+Use these methods to check if a word is in singular or plural form:
 
 ```typescript
-import pluralizer, { EGender } from '@elsikora/pluralizer';
+import { pluralizer } from '@elsikora/pluralizer';
 
-// To plural form
-console.log(pluralizer.toPlural('book')); // 'books'
-console.log(pluralizer.toPlural('child')); // 'children'
-console.log(pluralizer.toPlural('книга', { language: 'ru', gender: EGender.FEMININE })); // 'книги'
+// Check if a word is plural
+console.log(pluralizer.isPlural('books')); // Output: true
+console.log(pluralizer.isPlural('book'));  // Output: false
+console.log(pluralizer.isPlural('children')); // Output: true
+console.log(pluralizer.isPlural('книги', 'ru')); // Output: true
 
-// To singular form
-console.log(pluralizer.toSingular('books')); // 'book'
-console.log(pluralizer.toSingular('children')); // 'child'
-console.log(pluralizer.toSingular('книги', 'ru')); // 'книга'
+// Check if a word is singular
+console.log(pluralizer.isSingular('book')); // Output: true
+console.log(pluralizer.isSingular('books')); // Output: false
+console.log(pluralizer.isSingular('стол', 'ru')); // Output: true
 ```
 
-## Advanced Usage with Custom Instances
+## Advanced Usage with Word Entity
 
-For more control, you can create a custom instance of the Pluralizer class:
+For more control, you can create Word entities directly:
 
 ```typescript
-import { Pluralizer, Word, EGender } from '@elsikora/pluralizer';
+import { Word, PluralizerFactory, EGender } from '@elsikora/pluralizer';
 
+// Create a factory and get a specific language pluralizer
+const factory = new PluralizerFactory();
+const englishPluralizer = factory.createPluralizer('en');
+
+// Create a Word entity with properties
+const word = new Word('phenomenon', { language: 'en' });
+
+// Pluralize using the entity
+console.log(englishPluralizer.pluralize(word)); // Output: phenomena
+
+// Russian word with gender
+const russianPluralizer = factory.createPluralizer('ru');
+const russianWord = new Word('книга', { language: 'ru', gender: EGender.FEMININE });
+console.log(russianPluralizer.pluralize(russianWord)); // Output: книги
+```
+
+## Creating a Custom Instance
+
+If you need a custom configuration, you can create your own Pluralizer instance:
+
+```typescript
+import { Pluralizer, LanguageDetector } from '@elsikora/pluralizer';
+
+// Create a custom pluralizer instance
 const customPluralizer = new Pluralizer();
 
-// Create Word objects for more control
-const bookWord = new Word('book', { language: 'en' });
-const tableWord = new Word('стол', { language: 'ru', gender: EGender.MASCULINE });
+// Get supported languages
+const languages = customPluralizer.getSupportedLanguages();
+console.log(languages); // Output: ['en', 'ru']
 
-console.log(customPluralizer.pluralize(bookWord)); // 'books'
-console.log(customPluralizer.pluralize(tableWord)); // 'столы'
+// Check language support
+console.log(customPluralizer.supportsLanguage('en')); // Output: true
+console.log(customPluralizer.supportsLanguage('fr')); // Output: false
+
+// Create a custom language detector and add patterns
+const detector = new LanguageDetector('es'); // Set Spanish as default
+detector.addLanguagePattern('fr', /[àâäæçéèêëîïôœùûüÿ]/i); // Add French pattern
 ```
 
-## Working with the Factory
+## Handling Special Cases
 
-For advanced use cases, you can use the factory directly:
+Pluralizer includes special handling for irregular forms and uncountable words:
 
 ```typescript
-import { PluralizerFactory, EnglishPluralizer, RussianPluralizer } from '@elsikora/pluralizer';
+import { pluralizer } from '@elsikora/pluralizer';
 
-// Create a custom factory
-const factory = new PluralizerFactory();
+// English irregular plurals
+console.log(pluralizer.toPlural('phenomenon')); // Output: phenomena
+console.log(pluralizer.toPlural('criterion')); // Output: criteria
+console.log(pluralizer.toPlural('analysis')); // Output: analyses
+console.log(pluralizer.toPlural('cactus')); // Output: cacti
 
-// Register language implementations
-factory.registerPluralizer('en', new EnglishPluralizer());
-factory.registerPluralizer('ru', new RussianPluralizer());
+// Russian irregular plurals
+console.log(pluralizer.toPlural('человек', { gender: EGender.MASCULINE })); // Output: люди
+console.log(pluralizer.toPlural('ребёнок', { gender: EGender.MASCULINE })); // Output: дети
 
-// Get language-specific pluralizers
-const enPluralizer = factory.createPluralizer('en');
-const ruPluralizer = factory.createPluralizer('ru');
-
-console.log(enPluralizer.toPlural('analysis')); // 'analyses'
-console.log(ruPluralizer.toPlural('человек')); // 'люди'
-
-// Check supported languages
-console.log(factory.getSupportedLanguages()); // ['en', 'ru']
-console.log(factory.supportsLanguage('en')); // true
-console.log(factory.supportsLanguage('fr')); // false
+// Uncountable words remain unchanged
+console.log(pluralizer.toPlural('equipment')); // Output: equipment
+console.log(pluralizer.toPlural('information')); // Output: information
+console.log(pluralizer.toPlural('ножницы', { language: 'ru' })); // Output: ножницы
 ```
 
-## Complex Cases and Irregular Words
+## Case Preservation
 
-Pluralizer handles a wide range of complex cases in both languages:
+Pluralizer intelligently preserves the original case pattern:
 
 ```typescript
-import pluralizer from '@elsikora/pluralizer';
+import { pluralizer } from '@elsikora/pluralizer';
 
-// English irregular forms
-console.log(pluralizer.toPlural('criterion')); // 'criteria'
-console.log(pluralizer.toPlural('analysis')); // 'analyses'
-console.log(pluralizer.toPlural('cactus')); // 'cacti'
-console.log(pluralizer.toPlural('focus')); // 'foci'
-console.log(pluralizer.toPlural('thesis')); // 'theses'
-console.log(pluralizer.toPlural('phenomenon')); // 'phenomena'
+// Upper case preservation
+console.log(pluralizer.toPlural('BOOK')); // Output: BOOKS
+console.log(pluralizer.toPlural('CHILD')); // Output: CHILDREN
 
-// Russian irregular forms
-console.log(pluralizer.toPlural('человек', { language: 'ru' })); // 'люди'
-console.log(pluralizer.toPlural('ребёнок', { language: 'ru' })); // 'дети'
-console.log(pluralizer.toPlural('время', { language: 'ru', gender: EGender.NEUTER })); // 'времена'
+// First letter capitalization
+console.log(pluralizer.toPlural('Book')); // Output: Books
+console.log(pluralizer.toPlural('Child')); // Output: Children
+
+// Mixed case preservation
+console.log(pluralizer.toPlural('CamelCase')); // Output: CamelCases
+console.log(pluralizer.toPlural('iPod')); // Output: iPods
 ```
 
-## Capitalization Preservation
+## React/Next.js Integration Example
 
-Pluralizer preserves the original capitalization of words:
+```tsx
+import { useState } from 'react';
+import { pluralizer } from '@elsikora/pluralizer';
+
+function ItemCounter() {
+  const [count, setCount] = useState(1);
+  const itemText = pluralizer.pluralize('item', { count });
+  
+  return (
+    <div>
+      <button onClick={() => setCount(c => Math.max(0, c - 1))}>-</button>
+      <span>{count} {itemText}</span>
+      <button onClick={() => setCount(c => c + 1)}>+</button>
+    </div>
+  );
+}
+```
+
+## Internationalization (i18n) Integration
 
 ```typescript
-import pluralizer from '@elsikora/pluralizer';
+import { pluralizer, EGender } from '@elsikora/pluralizer';
 
-console.log(pluralizer.toPlural('Book')); // 'Books'
-console.log(pluralizer.toPlural('APPLE')); // 'APPLES'
-console.log(pluralizer.toPlural('Child')); // 'Children'
-console.log(pluralizer.toPlural('Книга', { gender: EGender.FEMININE })); // 'Книги'
-console.log(pluralizer.toPlural('СТОЛ', { gender: EGender.MASCULINE })); // 'СТОЛЫ'
+function formatMessage(key, count, language = 'en') {
+  const messages = {
+    'item.count': {
+      en: `You have ${count} {item}`,
+      ru: `У вас ${count} {item}`
+    }
+  };
+  
+  const template = messages[key][language];
+  const itemWord = language === 'en' ? 'item' : 'предмет';
+  const gender = language === 'ru' ? EGender.MASCULINE : undefined;
+  
+  return template.replace('{item}', pluralizer.pluralize(itemWord, { count, language, gender }));
+}
+
+console.log(formatMessage('item.count', 1, 'en')); // Output: You have 1 item
+console.log(formatMessage('item.count', 5, 'en')); // Output: You have 5 items
+console.log(formatMessage('item.count', 1, 'ru')); // Output: У вас 1 предмет
+console.log(formatMessage('item.count', 5, 'ru')); // Output: У вас 5 предметов
 ```
 
 ## 🛣 Roadmap
 | Task / Feature | Status |
 |---------------|--------|
-| # Future Development Roadmap | 🚧 In Progress |
-| - Add support for Spanish language with gender-aware pluralization | 🚧 In Progress |
-| - Implement French language support | 🚧 In Progress |
-| - Add German language with its complex pluralization rules | 🚧 In Progress |
-| - Support for more complex grammatical cases in Slavic languages | 🚧 In Progress |
-| - Expose an API for language pattern registration | 🚧 In Progress |
-| - Create plugins for popular frameworks (React, Vue, etc.) | 🚧 In Progress |
-| - Develop a web demo for trying the library | 🚧 In Progress |
-| - Support for numerical inflection (1st, 2nd, 3rd, etc.) | 🚧 In Progress |
-| - Implement specialized rules for technical and scientific terminology | 🚧 In Progress |
-| - Support for context-dependent pluralization | 🚧 In Progress |
-| (done) Multi-language support with comprehensive handling of English and Russian | 🚧 In Progress |
-| (done) Automatic language detection for seamless integration in multilingual applications | 🚧 In Progress |
-| (done) Gender-aware pluralization for languages with grammatical gender | 🚧 In Progress |
+| ## Future Development | 🚧 In Progress |
+| - Add support for Spanish language pluralization rules | 🚧 In Progress |
+| - Expand language support to include French, German, Italian, and more | 🚧 In Progress |
+| - Create specialized handling for proper nouns and names | 🚧 In Progress |
+| - Develop additional detection mechanisms for ambiguous words | 🚧 In Progress |
+| - Add context-aware pluralization for languages with complex number agreement | 🚧 In Progress |
+| - Implement browser-specific optimizations for web applications | 🚧 In Progress |
+| - Create plugins for popular frameworks (React, Vue, Angular) | 🚧 In Progress |
+| - Build integrations with common i18n libraries | 🚧 In Progress |
+| - Develop a web-based demo and playground | 🚧 In Progress |
+| - Support for numerical words ("one" → "ones", "first" → "firsts") | 🚧 In Progress |
+| - Implement count-specific forms for languages with complex countable forms | 🚧 In Progress |
+| (done) Zero dependencies - lightweight and portable | 🚧 In Progress |
+| (done) Full TypeScript support with comprehensive type definitions | 🚧 In Progress |
+| (done) Multilingual architecture with initial support for English and Russian | 🚧 In Progress |
 
 ## ❓ FAQ
 ## Frequently Asked Questions
 
-### Is Pluralizer suitable for production use?
-Yes! Pluralizer has extensive test coverage and is built with maintainability in mind. It's designed to be reliable in production environments.
+### How does Pluralizer handle words that are the same in both singular and plural forms?
 
-### Does Pluralizer work in both Node.js and browser environments?
-Yes, Pluralizer works in any JavaScript environment and is distributed in both ESM and CommonJS formats.
+Pluralizer maintains a comprehensive list of uncountable words for each supported language. Words like "sheep", "fish", "series" in English or "ножницы", "брюки" in Russian are recognized as special cases and will not be transformed.
 
-### How does language detection work?
-Language detection is based on character patterns. For example, Cyrillic characters trigger Russian language detection, while the absence of special characters defaults to English.
+### Does Pluralizer work with proper nouns and names?
 
-### What if I need to support a language that isn't included?
-Pluralizer is designed to be extensible. You can implement your own language service by following the IPluralizer interface and register it with the PluralizerFactory.
+Yes, Pluralizer can handle proper nouns and names. However, because names often follow special pluralization rules or maintain their form, results may vary. We recommend testing with your specific use cases.
 
-### Does Pluralizer handle uncountable words?
-Yes, the library maintains comprehensive lists of uncountable words for each supported language (like "information" or "деньги") and handles them appropriately.
+### How accurate is the automatic language detection?
 
-### How large is this library?
-Pluralizer is very lightweight. Since it has zero dependencies, it adds minimal overhead to your project.
+The language detector uses character pattern recognition that's highly reliable for distinguishing between Latin-based languages and Cyrillic. For languages sharing the same alphabet, explicit language specification is recommended for best results.
 
-### Is there a performance impact when using automatic language detection?
-The language detection is very efficient and adds negligible overhead. However, if you're processing large amounts of text, explicitly specifying the language may improve performance.
+### Can I add support for a new language?
 
-### How do I handle words that need context for correct pluralization?
-For words that need additional context, use the Word class to create word entities with the proper grammatical properties.
+Yes! Pluralizer is designed with extensibility in mind. You can create a new language implementation by extending the appropriate interfaces and registering it with the PluralizerFactory. The documentation includes examples for implementing new language support.
+
+### How does Pluralizer handle case sensitivity?
+
+Pluralizer intelligently preserves the case pattern of the original word. Whether your word is lowercase, UPPERCASE, Title Case, camelCase, or a miXeD case pattern, Pluralizer will maintain that pattern in the transformed word.
+
+### Does Pluralizer support non-standard pluralization rules in technical contexts?
+
+Yes, Pluralizer is built to handle specialized terminology. For example, it correctly transforms technical terms like "index" to "indices" and "matrix" to "matrices". If you encounter specialized terms not handled correctly, you can extend the irregular words list.
+
+### How does Pluralizer handle hyphenated or compound words?
+
+For compound words, Pluralizer typically pluralizes the last word component. For example, "mother-in-law" becomes "mothers-in-law". However, some compound words follow special rules and are included in the irregular words lists.
+
+### Is Pluralizer suitable for large-scale applications?
+
+Yes, Pluralizer is designed for performance and has zero dependencies, making it suitable for large-scale applications. Its modular design allows you to load only the languages you need.
 
 ## 🔒 License
 This project is licensed under **MIT License

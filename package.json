@@ -1,15 +1,17 @@
 {
 	"name": "@elsikora/pluralizer",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "A library for pluralizing words in different languages",
+	"main": "dist/cjs/index.js",
+	"module": "dist/esm/index.js",
 	"exports": {
 		".": {
-			"import": "./dist/esm/index.js",
-			"require": "./dist/cjs/index.js"
+			"require": "./dist/cjs/index.js",
+			"import": "./dist/esm/index.js"
 		}
 	},
 	"files": [
-		"./dist"
+		"dist"
 	],
 	"scripts": {
 		"prebuild": "rimraf dist",

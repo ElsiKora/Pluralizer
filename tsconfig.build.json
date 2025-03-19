@@ -1,13 +1,5 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "esModuleInterop": true,
-    "declaration": true,
-    "declarationDir": "dist/types",
-    "strict": true
-  },
+  "extends": "./tsconfig.json",
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "src/test/**/*", "**/*.test.ts", "**/*.spec.ts", "**/*.test-data.ts", "dist"]
 }

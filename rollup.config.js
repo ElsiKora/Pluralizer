@@ -10,12 +10,14 @@ export default [
 			dir: "dist/esm",
 			format: "esm",
 			preserveModules: true,
+			sourcemap: true,
 		},
 		plugins: [
 			typescript({
 				declaration: true,
 				declarationDir: "dist/esm",
 				outDir: "dist/esm",
+				sourceMap: true,
 				tsconfig: "./tsconfig.build.json",
 			}),
 		],
@@ -28,12 +30,14 @@ export default [
 			exports: "named",
 			format: "cjs",
 			preserveModules: true,
+			sourcemap: true,
 		},
 		plugins: [
 			typescript({
 				declaration: true,
 				declarationDir: "dist/cjs",
 				outDir: "dist/cjs",
+				sourceMap: true,
 				tsconfig: "./tsconfig.build.json",
 			}),
 		],

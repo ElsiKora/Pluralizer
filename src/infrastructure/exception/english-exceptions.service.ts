@@ -185,7 +185,6 @@ export const englishUncountableWords: Array<string> = [
 	"cotton",
 	"courage",
 	"cream",
-	"currency",
 	"damage",
 	"demographics",
 	"dirt",

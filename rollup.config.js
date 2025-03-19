@@ -1,4 +1,5 @@
 import typescript from "@rollup/plugin-typescript";
+import generatePackageJson from "rollup-plugin-generate-package-json";
 
 const external = [];
 
@@ -20,6 +21,10 @@ export default [
 				sourceMap: true,
 				tsconfig: "./tsconfig.build.json",
 			}),
+			generatePackageJson({
+				baseContents: { type: "module" },
+				outputFolder: "dist/esm",
+			}),
 		],
 	},
 	{
@@ -39,6 +44,10 @@ export default [
 				outDir: "dist/cjs",
 				sourceMap: true,
 				tsconfig: "./tsconfig.build.json",
+			}),
+			generatePackageJson({
+				baseContents: { type: "commonjs" },
+				outputFolder: "dist/cjs",
 			}),
 		],
 	},

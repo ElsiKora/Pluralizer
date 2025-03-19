@@ -13,12 +13,13 @@ describe("EnglishPluralizer", () => {
 			expect(pluralizer.pluralize(word)).toBe("books");
 		});
 
-		it("should handle words ending in s, x, z, ch, sh", () => {
+		it("should handle words ending in s, x, z, ch, sh, y", () => {
 			const testCases = [
 				["box", "boxes"],
 				["buzz", "buzzes"],
 				["match", "matches"],
 				["dish", "dishes"],
+				["currency", "currencies"],
 			];
 
 			testCases.forEach(([singular, expected]) => {

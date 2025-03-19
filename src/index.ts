@@ -6,12 +6,6 @@ import { Pluralizer } from "./presentation/api/pluralizer.api";
  */
 
 /**
- * Export the default singleton instance of the Pluralizer
- * @type {Pluralizer}
- */
-export default new Pluralizer();
-
-/**
  * Factory class for creating pluralizer instances
  */
 export { PluralizerFactory } from "./application/factory/pluralizer.factory";
@@ -60,3 +54,8 @@ export type { TLanguage } from "./domain/type/language.type";
  * Main Pluralizer API class
  */
 export { Pluralizer } from "./presentation/api/pluralizer.api";
+
+/**
+ * Singleton instance of the Pluralizer API
+ */
+export const pluralizer: Pluralizer = new Pluralizer();
